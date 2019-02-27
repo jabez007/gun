@@ -34,6 +34,7 @@ if(!SEA){ return }
 
 describe('SEA', function(){
   var user;
+  var group;
   var gun;
   var pub;
   describe('Utility', function(){
@@ -317,8 +318,47 @@ describe('SEA', function(){
         done();
       });
     })
-  });
 
+    describe('Group', function(){
+      it('is instantiable', function(done){
+        gun = Gun();
+        user = gun.user();
+        group = gun.group();
+        user.create('testUser1', 'test123', function(){
+          done();
+        });
+      })
+  
+      it('create groups', function(done){        
+        group.create('testGroup1', function(ack){
+          pub = '%'+ack.pub;
+          expect(ack.err).to.not.be.ok();
+          done();
+        });
+      })
+  
+      it('join groups', function(done){
+        group.join('testGroup1', function(ack){
+          expect(ack.err).to.not.be.ok();
+          done();
+        });
+      })
+  
+      it('grant access to groups', function(done){
+        group.grant('carl', function(ack){
+          expect(ack.err).to.not.be.ok();
+          done();
+        });
+      })
+      
+      it('revoke access to groups', function(done){
+        group.revoke('carl', function(ack){
+          expect(ack.err).to.not.be.ok();
+          done();
+        });
+      })
+    }); 
+  });
 })
 
 })()
